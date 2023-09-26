@@ -1,4 +1,6 @@
 import os
+import contextlib
+import asyncio
 
 from interactions import Client, Intents, listen, slash_command, SlashContext
 from dotenv import load_dotenv
@@ -22,4 +24,10 @@ async def ping(ctx: SlashContext):
     await ctx.send("Pong!")  # send a message to the channel the command was used in
 
 
-bot.start(os.environ["BOT_TOKEN"])
+async def main():
+    bot.load_extensions("exts")
+    await bot.astart(os.environ["BOT_TOKEN"])
+
+if __name__ == "__main__":
+    with contextlib.suppress(KeyboardInterrupt):
+        asyncio.run(main())
